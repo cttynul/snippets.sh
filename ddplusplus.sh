@@ -2,7 +2,7 @@
 # dd++ make using dd easier
 # it display a progress bar in terminal or dialog mode
 # published under GNU GPLv3
-# zegt.github.io
+# cttynul.ml
 
 # check $1 and $2
 if [ $# -ne 2 ]
