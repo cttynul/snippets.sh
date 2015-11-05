@@ -1,6 +1,6 @@
 #!bin/bash
-# dd++ make using dd easier
-# it display a progress bar in terminal or dialog mode
+# dd++ makes using dd easier
+# it displays a progress bar in terminal or dialog mode
 # published under GNU GPLv3
 # cttynul.ml
 
