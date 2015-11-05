@@ -15,4 +15,4 @@ $ sh ddplusplus.sh Input_File Output_File
 
 
 ### License
-GIMPshop Reloaded is published under GNU General Public License v3.0.
+GNU General Public License v3.0.
