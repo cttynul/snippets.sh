@@ -9,15 +9,17 @@ if [ $# -ne 2 ]
 then
 	echo "Usage: $0 input output"
 	exit 1
+fi
 
 # check if root
-#elif [ $EUID -ne 0 ] 
-#then
-#	echo "You must be root to run this" 1>&2
-#	exit 1
+if [ $EUID -ne 0 ] 
+then
+	echo "You must be root to run this" 1>&2
+	exit 1
+fi
 
 # check if pv is installed
-elif which pv >/dev/null 
+if which pv >/dev/null 
 then
 	if which dialog >/dev/null
 	then
