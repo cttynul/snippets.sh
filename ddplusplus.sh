@@ -28,8 +28,7 @@ then
 	else
 		echo "dd++ is cloning $1 into $2. Please wait..."		
 		pv -tpreb $1 | dd of=$2 bs=4096 conv=notrunc,noerror
-fi	
-
+	fi	
 else
 	echo "pv is not installed, need it to run $0"
 	exit 1
