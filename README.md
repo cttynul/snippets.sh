@@ -1,7 +1,7 @@
 dd++
 ======
 
-###Introduction
+### Introduction
 dd is a command-line utility for Unix and Unix-like operating systems whose primary purpose is to convert and copy files. (Wikipedia.org)
 
 dd++ makes using dd easier displaying a progress bar in terminal or dialog mode.
