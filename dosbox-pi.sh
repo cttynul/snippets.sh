@@ -1,10 +1,10 @@
 #!\bin\bash
 
-echo     __             __                             __ 
-echo .--|  .-----.-----|  |--.-----.--.--.______.-----|__|
-echo |  _  |  _  |__ --|  _  |  _  |_   _|______|  _  |  |
-echo |_____|_____|_____|_____|_____|__.__|      |   __|__|
-echo  -cttynul                                  |__|      
+echo "    __             __                             __ "
+echo ".--|  .-----.-----|  |--.-----.--.--.______.-----|__|"
+echo "|  _  |  _  |__ --|  _  |  _  |_   _|______|  _  |  |"
+echo "|_____|_____|_____|_____|_____|__.__|      |   __|__|"
+echo " -cttynul                                  |__|      "
 
 if [ "$EUID" -ne 0 ]
   then echo "Please run as root"
@@ -25,10 +25,12 @@ if [ "$option" -ne "Y" ]
 else
   read -p "Enter your user account (i.e. pi): " name
   apt update
+  # Installing DOSBox
   apt -y install dosbox
   mkdir -p ~/DOS/C
   mkdir -p ~/DOS/A
-
+  
+  # DOSBox Conf Setup
   echo [sdl] >> `ls ~/.dosbox/dosbox-*.conf`
   echo fullscreen=true >> `ls ~/.dosbox/dosbox-*.conf`
   echo fullresolution=desktop >> `ls ~/.dosbox/dosbox-*.conf`
@@ -41,17 +43,21 @@ else
   echo C: >> `ls ~/.dosbox/dosbox-*.conf`
   echo DIR C:\ >> `ls ~/.dosbox/dosbox-*.conf`
 
+  # Setting up samba share for C and A DOSbox Drives
   apt install -y samba samba-common-bin
+  chmod 777 /home/$name/DOS/C
+  chmod 777 /home/$name/DOS/A
   echo [DOS Drive] >> /etc/samba/smb.conf
   echo path=/home/$name/DOS >> /etc/samba/smb.conf
-  echo writeable=Yes  >> /etc/samba/smb.conf
+  echo writeable=yes  >> /etc/samba/smb.conf
   echo create mask=0777 >> /etc/samba/smb.conf
-  directory mask=0777 >> /etc/samba/smb.conf
-  public=yes >> /etc/samba/smb.conf
+  echo directory mask=0777 >> /etc/samba/smb.conf
+  echo public=yes >> /etc/samba/smb.conf
+  echo read only=no >> /etc/samba/smb.conf
   systemctl enable smbd
   systemctl restart smbd
   echo "You can access your DOS drive from another PC in your LAN browsing:"
-  echo smb://$(hostname)/ or smb://$(hostname -I)/
+  echo smb://$(hostname) or smb://$(hostname -I)
   echo "Enjoy"
   echo "- cttynul"
 fi
