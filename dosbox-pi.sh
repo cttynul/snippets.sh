@@ -1,5 +1,10 @@
 #!\bin\bash
 
+reboot_target () {
+  read -p "Press any key to reboot" par
+  reboot now
+}
+
 echo "    __             __                             __ "
 echo ".--|  .-----.-----|  |--.-----.--.--.______.-----|__|"
 echo "|  _  |  _  |__ --|  _  |  _  |_   _|______|  _  |  |"
@@ -64,6 +69,28 @@ else
   echo smb://$(hostname) or smb://$(hostname -I)
   echo "Enjoy"
   echo "- cttynul"
-  read -p "Press any key to reboot" par
-  reboot now
+fi
+
+read -p "Do you want to install RetroPie? [Y|n]" option
+if [ "$option" -ne "Y" ]
+  then reboot_target
+else
+  apt install git
+  git clone https://github.com/RetroPie/RetroPie-Setup.git
+  chmod +x ./RetroPie-Setup/retropie_setup.sh
+  ./RetroPie-Setup/retropie_setup.sh
+  chmod 777 /home/$name/RetroPie
+  echo [RetroPie] >> /etc/samba/smb.conf
+  echo path=/home/$name/RetroPie >> /etc/samba/smb.conf
+  echo writeable=yes  >> /etc/samba/smb.conf
+  echo create mask=0777 >> /etc/samba/smb.conf
+  echo directory mask=0777 >> /etc/samba/smb.conf
+  echo public=yes >> /etc/samba/smb.conf
+  echo read only=no >> /etc/samba/smb.conf
+  systemctl restart smbd
+  echo "You can access your RetroPie folder from another PC in your LAN browsing:"
+  echo smb://$(hostname) or smb://$(hostname -I)
+  echo "To run Retropie you need to type emulationstation in your Rasbian CLI"
+  echo "- cttynul"
+  reboot_target
 fi
