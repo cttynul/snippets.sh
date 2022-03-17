@@ -16,19 +16,24 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
-echo [PI ONLY] To console autologin see following steps
-echo raspi-config
-echo Choose option: 1 System Options
-echo Choose option: S5 Boot / Auto Login
-echo Choose option: B2 Console Autologin
-echo Select Finish, and reboot the Raspberry Pi.
+read -p "Are you currently running this on a Raspberry PI? [Y|n]" rpi_op
+
+if [ "$rpi_op" -eq "Y" ]
+  then 
+    echo To autologin perform following steps
+    echo "> raspi-config"
+    echo Choose option: 1 System Options
+    echo Choose option: S5 Boot / Auto Login
+    echo Choose option: B2 Console Autologin
+    echo Select Finish, and reboot the Raspberry Pi.
+fi
+
 read -p "Do you want to turn your device into a Dosbox Machine? [Y|n]" option
 
 if [ "$option" -ne "Y" ]
   then echo "Exiting..."
   exit
 else
-  read -p "Enter your user account (i.e. pi): " name
   apt update
   # Installing DOSBox
   apt -y install dosbox
@@ -48,16 +53,12 @@ else
   echo C: >> `ls ~/.dosbox/dosbox-*.conf`
   echo DIR C:\ >> `ls ~/.dosbox/dosbox-*.conf`
   
-  #forcing 640x480 pi resolution
-  echo hdmi_group=1 >> /boot/config.txt
-  echo hdmi_mode=1 >> /boot/config.txt
-
   # Setting up samba share for C and A DOSbox Drives
   apt install -y samba samba-common-bin
-  chmod 777 /home/$name/DOS/C
-  chmod 777 /home/$name/DOS/A
-  echo [DOS Drive] >> /etc/samba/smb.conf
-  echo path=/home/$name/DOS >> /etc/samba/smb.conf
+  chmod 777 ~/DOS/C
+  chmod 777 ~/DOS/A
+  echo [DOSBox] >> /etc/samba/smb.conf
+  echo path=~/DOS/ >> /etc/samba/smb.conf
   echo writeable=yes  >> /etc/samba/smb.conf
   echo create mask=0777 >> /etc/samba/smb.conf
   echo directory mask=0777 >> /etc/samba/smb.conf
@@ -71,6 +72,14 @@ else
   echo "- cttynul"
 fi
 
+# RPI Settings
+if [ "$rpi_op" -eq "Y" ]
+  then 
+    #forcing 640x480 pi resolution
+    echo hdmi_group=1 >> /boot/config.txt
+    echo hdmi_mode=1 >> /boot/config.txt
+fi
+
 read -p "Do you want to install RetroPie? [Y|n]" option
 if [ "$option" -ne "Y" ]
   then reboot_target
@@ -79,9 +88,9 @@ else
   git clone https://github.com/RetroPie/RetroPie-Setup.git
   chmod +x ./RetroPie-Setup/retropie_setup.sh
   ./RetroPie-Setup/retropie_setup.sh
-  chmod 777 /home/$name/RetroPie
+  chmod 777 ~/RetroPie
   echo [RetroPie] >> /etc/samba/smb.conf
-  echo path=/home/$name/RetroPie >> /etc/samba/smb.conf
+  echo path=~/RetroPie >> /etc/samba/smb.conf
   echo writeable=yes  >> /etc/samba/smb.conf
   echo create mask=0777 >> /etc/samba/smb.conf
   echo directory mask=0777 >> /etc/samba/smb.conf
