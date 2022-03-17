@@ -42,6 +42,10 @@ else
   echo MOUNT C ~/DOS/C >> `ls ~/.dosbox/dosbox-*.conf`
   echo C: >> `ls ~/.dosbox/dosbox-*.conf`
   echo DIR C:\ >> `ls ~/.dosbox/dosbox-*.conf`
+  
+  #forcing 640x480 pi resolution
+  echo hdmi_group=1 >> /boot/config.txt
+  echo hdmi_mode=1 >> /boot/config.txt
 
   # Setting up samba share for C and A DOSbox Drives
   apt install -y samba samba-common-bin
@@ -60,4 +64,6 @@ else
   echo smb://$(hostname) or smb://$(hostname -I)
   echo "Enjoy"
   echo "- cttynul"
+  read -p "Press any key to reboot" par
+  reboot now
 fi
