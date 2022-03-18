@@ -84,7 +84,8 @@ read -p "Do you want to install RetroPie? [Y|n]" option
 if [ "$option" -ne "Y" ]
   then reboot_target
 else
-  apt install git
+  apt install -y git
+  apt install -y libsdl*dev
   git clone https://github.com/RetroPie/RetroPie-Setup.git
   chmod +x ./RetroPie-Setup/retropie_setup.sh
   ./RetroPie-Setup/retropie_setup.sh
